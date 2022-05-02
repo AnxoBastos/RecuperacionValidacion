@@ -19,6 +19,9 @@ public class Concesionario{
     private final Map<String, Coche> stock;
     private final Map<String, Coche> vendidos;
     
+    public static final  java.util.regex.Pattern PATRON_CIF = java.util.regex.Pattern.compile("[A-Z]{1}[0-9]{8}");
+    public static final java.util.regex.Pattern PATRON_NOMBRE = java.util.regex.Pattern.compile("[a-zA-Z0-9.]{1,}");
+    
     public Concesionario(String cif, String nombre){
         checkNombre(nombre);
         checkCIF(cif);
@@ -32,13 +35,13 @@ public class Concesionario{
     
     
     private  void checkCIF(String s){
-        if(s == null || s.isBlank() || !s.matches("[A-Z]{1}[0-9]{8}")){
+        if(s == null || s.isBlank() || !PATRON_CIF.matcher(s).matches()){
             throw new IllegalArgumentException();
         }
     }
           
     private void checkNombre(String s){
-        if(s == null || s.isBlank() || !s.matches("[a-zA-Z0-9.]{1,}")){
+        if(s == null || s.isBlank() || !PATRON_NOMBRE.matcher(s).matches()){
             throw new IllegalArgumentException();
         }
     }
@@ -46,9 +49,9 @@ public class Concesionario{
     
     
     
-    public boolean añadirCoche(String bastidor, Coche coche){
-        if(!this.stock.containsKey(bastidor) || !this.vendidos.containsKey(bastidor)){
-            this.stock.put(bastidor, coche);
+    public boolean añadirCoche(Coche coche){
+        if(!this.stock.containsKey(coche.getBastidor()) && !this.vendidos.containsKey(coche.getBastidor())){
+            this.stock.put(coche.getBastidor(), coche);
             return true;
         }
         else{
@@ -92,7 +95,7 @@ public class Concesionario{
         for(String key : this.stock.keySet()){
             pvp += this.stock.get(key).getPvp();
         }
-        String txt = (this.vendidos.values().size() + " vehiculos vendidos con un importe de "  + pvp);
+        String txt = (this.stock.values().size() + " vehiculos vendidos con un importe de "  + pvp + "€");
         return txt;
     }
     
@@ -101,7 +104,7 @@ public class Concesionario{
         for(String key : this.vendidos.keySet()){
             pvp += this.vendidos.get(key).getPvp();
         }
-        String txt = (this.vendidos.values().size() + " vehiculos vendidos con un importe de "  + pvp);
+        String txt = (this.vendidos.values().size() + " vehiculos vendidos con un importe de "  + pvp + "€");
         return txt;
     }  
 }

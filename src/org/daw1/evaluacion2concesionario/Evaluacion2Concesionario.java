@@ -4,7 +4,6 @@
  */
 package org.daw1.evaluacion2concesionario;
 
-import java.time.LocalDate;
 import java.util.regex.Pattern;
 import org.daw1.evaluacion2concesionario.classes.Coche;
 import org.daw1.evaluacion2concesionario.classes.Concesionario;
@@ -40,7 +39,7 @@ public class Evaluacion2Concesionario {
                 case "1":
                     //Damos de alta un nuevo vehículo y lo guardamos en el concesionario. Validar datos.
                     Coche coche = crearCoche();
-                    if(concesionario.añadirCoche(coche.getBastidor(), coche)){
+                    if(concesionario.añadirCoche(coche)){
                         System.out.println("El coche se añadio correctamente");
                     }
                     else{
@@ -55,7 +54,7 @@ public class Evaluacion2Concesionario {
                         System.out.println("El coche se ha vendido con exito");
                     }
                     else{
-                        System.out.println("ERROR: El coche no ha podido venderse");
+                        System.out.println("ERROR: El coche no ha podido venderse (Se encuentra vendido o no existe)");
                     }
                     break;
                 case "3":
@@ -86,36 +85,18 @@ public class Evaluacion2Concesionario {
     }  
     
     private static Concesionario crearConcesionario(){
-        System.out.println("Inserte el nombre del concesionario");
-        String nombre = "";
-        do{
-            nombre = teclado.nextLine();
-            if(!nombre.matches("[a-zA-Z.]{1,}")){
-                System.out.println("El nombre no puede contener caracteres diferentes a letras, numeros y puntos");
-            }
-            teclado.nextLine();
-        }
-        while(!nombre.matches("[a-zA-Z.]{1,}"));
-        System.out.println("Inserte el Cif del concesionario");
-        String cif = "";
-        do{
-            nombre = teclado.nextLine();
-            if(!cif.matches("[A-Z]{1}[0-9]{8}")){
-                System.out.println("El nombre no puede contener caracteres diferentes a letras, numeros y puntos");
-            }
-            teclado.nextLine();
-        }
-        while(!cif.matches("[A-Z]{1}[0-9]{8}"));
-        return new Concesionario(nombre, cif);
+        String nombre = checkString("Introduzca el nombre del concesionario", "ERROR: El nombre solo puede estar formado por letras, numeros y puntos", Concesionario.PATRON_NOMBRE);
+        String cif = checkString("Introduzca el cif del concesionario", "ERROR: El cif debe seguir el siguiente formato (A12345678)", Concesionario.PATRON_CIF);
+        return new Concesionario(cif, nombre);
     }
     
     private static Coche crearCoche(){
         String marca = checkString("Introduzca la marca del coche", "ERROR: La marca debe estar formada unicamente por letras y numeros", Coche.PATRON_MARCA_MODELO);
         String modelo = checkString("Introduzca el modelo del coche", "ERROR: El modelo debe estar formada unicamente por letras y numeros", Coche.PATRON_MARCA_MODELO);
-        String bastidor = checkString("Introduzca el numero de bastidor del coche", "ERROR: El numero de bastidor debe seguir el siguiente formato (ABCDEF1GHI234567)", Coche.PATRON_BASTIDOR);
+        String bastidor = checkString("Introduzca el numero de bastidor del coche", "ERROR: El numero de bastidor debe seguir el siguiente formato (ABCDEF1GHIJ234567)", Coche.PATRON_BASTIDOR);
         
-        mostrarVehiculos();
         TipoVehiculo tipoVehiculo = null;
+        System.out.println("Inserte el numero del tipo de vehiculo que desea");
         int opcionVehiculo = -1;
         do{
             mostrarVehiculos();
@@ -127,6 +108,9 @@ public class Evaluacion2Concesionario {
                 else{
                     tipoVehiculo = TipoVehiculo.of(opcionVehiculo);
                 }
+            }
+            else{
+                System.out.println("ERROR: Debe insertar un numero");
             }
             teclado.nextLine();
         }
@@ -141,6 +125,9 @@ public class Evaluacion2Concesionario {
                     System.out.println("ERROR: El precio del vehiculo debe ser mayor que 0€");
                 }
             }
+            else{
+                System.out.println("ERROR: El precio del vehiculo debe ser un numero");
+            }
             teclado.nextLine();
         }
         while(precioCompra <= 0);
@@ -148,15 +135,18 @@ public class Evaluacion2Concesionario {
         int margen = -1;
         do{
             System.out.println("Introduzca el margen de beneficios");
-            if(teclado.hasNextDouble()){
-                precioCompra = teclado.nextDouble();
-                if(margen < 0){
-                    System.out.println("ERROR: El margen de beneficios debe ser mayor o igual a 0€");
+            if(teclado.hasNextInt()){
+                margen = teclado.nextInt();
+                if(margen <= 0){
+                    System.out.println("ERROR: El margen de beneficios debe ser mayor que 0€");
                 }
+            }
+            else{
+                System.out.println("ERROR: Debe insertar un numero");
             }
             teclado.nextLine();
         }
-        while(margen < 0);
+        while(margen <= 0);
         
         return new Coche(marca, modelo, bastidor, tipoVehiculo, precioCompra, margen);
     }

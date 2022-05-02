@@ -66,7 +66,7 @@ public class Coche implements Comparable<Coche>{
     }
     
     private void checkMargen(int i){
-        if(i < 0){
+        if(i <= 0){
             throw new IllegalArgumentException();
         }
     }
@@ -160,7 +160,7 @@ public class Coche implements Comparable<Coche>{
     
     protected void vendido(){
         this.fechaVenta = LocalDate.now();
-        this.pvp = generatePVP();
+        //this.pvp = generatePVP();
     }
     
     private double generatePVP(){
