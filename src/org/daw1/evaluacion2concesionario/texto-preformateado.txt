@@ -1,0 +1,1 @@
+"Marca: Seat\nModelo: Ibiza\nBastidor: ABCDEF1ABCD123456\nPrecio compra: 3000€\nMargen: 100%\nPVP: 6000€\nFecha compra: " + LocalDate.now() + "\nFecha venta: No vendido\n\n"
