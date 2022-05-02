@@ -14,7 +14,7 @@ public enum TipoVehiculo{
     TURISMO, RANCHERA, MONOVOLUMEN, SUV, FURGONETA, OTRO;
     
     public static TipoVehiculo of(int tipo){
-        if(tipo < 0 || tipo > TipoVehiculo.values().length){
+        if(tipo < 1 || tipo > TipoVehiculo.values().length){
             throw new IllegalArgumentException();
         }
         else{

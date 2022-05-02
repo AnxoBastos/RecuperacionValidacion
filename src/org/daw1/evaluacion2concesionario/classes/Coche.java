@@ -23,8 +23,8 @@ public class Coche implements Comparable<Coche>{
     private LocalDate fechaVenta; 
     private int margen;
     
-    public final java.util.regex.Pattern PATRON_MARCA_MODELO = java.util.regex.Pattern.compile("[A-Za-z0-9]{1,}");
-    public final java.util.regex.Pattern PATRON_BASTIDOR = java.util.regex.Pattern.compile("[A-Z]{6}[0-9]{1}[A-Z]{4}[0-9]{6}");
+    public static final  java.util.regex.Pattern PATRON_MARCA_MODELO = java.util.regex.Pattern.compile("[A-Za-z0-9]{1,}");
+    public static final java.util.regex.Pattern PATRON_BASTIDOR = java.util.regex.Pattern.compile("[A-Z]{6}[0-9]{1}[A-Z]{4}[0-9]{6}");
     
     public Coche(String marca, String modelo, String bastidor, TipoVehiculo tipo, double precioCompra, int margen){
         this.marca = marca;

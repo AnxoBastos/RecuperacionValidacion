@@ -30,6 +30,7 @@ public class Concesionario{
     
     
     
+    
     private  void checkCIF(String s){
         if(s == null || s.isBlank() || !s.matches("[A-Z]{1}[0-9]{8}")){
             throw new IllegalArgumentException();
@@ -39,6 +40,31 @@ public class Concesionario{
     private void checkNombre(String s){
         if(s == null || s.isBlank() || !s.matches("[a-zA-Z0-9.]{1,}")){
             throw new IllegalArgumentException();
+        }
+    }
+    
+    
+    
+    
+    public boolean añadirCoche(String bastidor, Coche coche){
+        if(!this.stock.containsKey(bastidor) || !this.vendidos.containsKey(bastidor)){
+            this.stock.put(bastidor, coche);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    public boolean venderCoche(String bastidor){
+        if(this.stock.containsKey(bastidor) && !this.vendidos.containsKey(bastidor)){
+            this.vendidos.put(bastidor, stock.get(bastidor));
+            this.vendidos.get(bastidor).vendido();
+            this.stock.remove(bastidor);
+            return true;
+        }
+        else{
+            return false;
         }
     }
     
@@ -61,27 +87,21 @@ public class Concesionario{
         return txt;
     }
     
-    public void mostrarValorStock(){
+    public String mostrarValorStock(){
         int pvp = 0;
         for(String key : this.stock.keySet()){
             pvp += this.stock.get(key).getPvp();
         }
-        System.out.println(this.stock.values().size() + " vehiculos sin vender con un importe de " + pvp);
+        String txt = (this.vendidos.values().size() + " vehiculos vendidos con un importe de "  + pvp);
+        return txt;
     }
     
-    public void mostrarValorVendidos(){
+    public String mostrarValorVendidos(){
         int pvp = 0;
         for(String key : this.vendidos.keySet()){
             pvp += this.vendidos.get(key).getPvp();
         }
-        System.out.println(this.vendidos.values().size() + " vehiculos vendidos con un importe de "  + pvp);
-    }
-    
-    public void venderCoche(String bastidor){
-        if(stock.containsKey(bastidor) && !vendidos.containsKey(bastidor)){
-            this.vendidos.put(bastidor, stock.get(bastidor));
-            this.vendidos.get(bastidor).vendido();
-            this.stock.remove(bastidor);
-        }
-    }
+        String txt = (this.vendidos.values().size() + " vehiculos vendidos con un importe de "  + pvp);
+        return txt;
+    }  
 }
